@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProinterV.CrossCutting.Bus\ProinterV.CrossCutting.Bus.csproj" />
+    <ProjectReference Include="..\ProinterV.Domain\ProinterV.Domain.csproj" />
+    <ProjectReference Include="..\ProinterV.Infra.Data\ProinterV.Infra.Data.csproj" />
+    <ProjectReference Include="..\ProinterV.Service\ProinterV.Application.csproj" />
+  </ItemGroup>
+
+</Project>

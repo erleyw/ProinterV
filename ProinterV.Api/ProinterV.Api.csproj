@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <UserSecretsId>prointerv-10f859a0-849a-4469-83b5-30c4bc7ff4dd</UserSecretsId>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Users\erley.alvarenga\source\repos\ProinterV\ProinterV.Api\ProinterV.Api.xml</DocumentationFile>
+    <OutputPath></OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.1.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProinterV.CrossCutting.Bus\ProinterV.CrossCutting.Bus.csproj" />
+    <ProjectReference Include="..\ProinterV.Domain.Core\ProinterV.Domain.Core.csproj" />
+    <ProjectReference Include="..\ProinterV.IoC\ProinterV.IoC.csproj" />
+    <ProjectReference Include="..\ProinterV.Service\ProinterV.Application.csproj" />
+  </ItemGroup>
+
+</Project>
