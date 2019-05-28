@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using ProinterV.Application.Interfaces;
 using ProinterV.Application.Services;
 using ProinterV.CrossCutting.Bus;
+using ProinterV.CrossCutting.Identity.Authorization;
+using ProinterV.CrossCutting.Identity.Models;
 using ProinterV.Domain.CommandHandlers;
 using ProinterV.Domain.Commands;
 using ProinterV.Domain.Core.Bus;
@@ -36,7 +38,7 @@ namespace ProinterV.IoC
             services.AddScoped<IMediatorHandler, InMemoryBus>();
 
             // ASP.NET Authorization Polices
-            //services.AddSingleton<IAuthorizationHandler, ClaimsRequirementHandler>();
+            services.AddSingleton<IAuthorizationHandler, ClaimsRequirementHandler>();
 
             // Application
             services.AddScoped<IAlunoAppService, AlunoAppService>();
@@ -84,7 +86,7 @@ namespace ProinterV.IoC
             //services.AddTransient<ISmsSender, AuthSMSMessageSender>();
 
             // Infra - Identity
-            //services.AddScoped<IUser, AspNetUser>();
+            services.AddScoped<IUser, AspNetUser>();
         }
     }
 }

@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ProinterV.CrossCutting.Bus\ProinterV.CrossCutting.Bus.csproj" />
+    <ProjectReference Include="..\ProinterV.CrossCutting.Identity\ProinterV.CrossCutting.Identity.csproj" />
     <ProjectReference Include="..\ProinterV.Domain\ProinterV.Domain.csproj" />
     <ProjectReference Include="..\ProinterV.Infra.Data\ProinterV.Infra.Data.csproj" />
     <ProjectReference Include="..\ProinterV.Service\ProinterV.Application.csproj" />
