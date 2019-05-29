@@ -33,7 +33,7 @@ namespace ProinterV.Api.Controllers
         /// <response code="500">Internal Server error</response>
         [HttpPost("/tarefa")]
         [AllowAnonymous]
-        public IActionResult Post(TarefaViewModel tarefaViewModel)
+        public IActionResult RegistrarTarefa(TarefaViewModel tarefaViewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -54,7 +54,7 @@ namespace ProinterV.Api.Controllers
         /// <response code="500">Internal Server error</response>
         [HttpPut("/tarefa")]
         [AllowAnonymous]
-        public IActionResult Put(TarefaViewModel tarefaViewModel)
+        public IActionResult AlterarTarefa(TarefaViewModel tarefaViewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -75,7 +75,7 @@ namespace ProinterV.Api.Controllers
         /// <response code="500">Internal Server error</response>
         [HttpGet("/tarefa")]
         [AllowAnonymous]
-        public IActionResult Get()
+        public IActionResult BuscarTodasTarefas()
         {
             if (!ModelState.IsValid)
             {
@@ -96,7 +96,7 @@ namespace ProinterV.Api.Controllers
         /// <response code="500">Internal Server error</response>
         [HttpGet("tarefa/{idTarefa}")]
         [AllowAnonymous]
-        public IActionResult GetById(Guid idGrupo, Guid? idTarefa)
+        public IActionResult GetTarefaById(Guid idGrupo, Guid? idTarefa)
         {
             if (!ModelState.IsValid)
             {
@@ -139,7 +139,7 @@ namespace ProinterV.Api.Controllers
         [HttpDelete]
         //[Authorize(Policy = "CanRemoveCustomerData")]
         [Route("tarefa")]
-        public IActionResult Delete(Guid id)
+        public IActionResult ExcluirTarefa(Guid id)
         {
             //_tarefaAppService.Remove(id);
 
@@ -156,7 +156,7 @@ namespace ProinterV.Api.Controllers
         [HttpGet]
         [AllowAnonymous]
         [Route("tarefa/history/{id:guid}")]
-        public IActionResult History(Guid id)
+        public IActionResult HistoricoDaTarefa(Guid id)
         {
             var tarefaHistoryData = _tarefaAppService.GetAllHistory(id);
             return Response(tarefaHistoryData);

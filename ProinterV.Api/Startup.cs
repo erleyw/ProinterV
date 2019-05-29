@@ -68,7 +68,8 @@ namespace ProinterV.Api
             services.AddMvc(options =>
             {
                 options.OutputFormatters.Remove(new XmlDataContractSerializerOutputFormatter());
-                options.UseCentralRoutePrefix(new RouteAttribute("api/v{version}"));
+                //options.UseCentralRoutePrefix(new RouteAttribute("api/v{version}"));
+                options.UseCentralRoutePrefix(new RouteAttribute("api/v1"));
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 

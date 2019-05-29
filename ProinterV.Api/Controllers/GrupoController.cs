@@ -33,7 +33,7 @@ namespace ProinterV.Api.Controllers
         /// <response code="500">Internal Server error</response>
         [HttpPost("/grupo")]
         [AllowAnonymous]
-        public IActionResult Post(GrupoViewModel grupoViewModel)
+        public IActionResult RegistrarGrupo(GrupoViewModel grupoViewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -52,9 +52,9 @@ namespace ProinterV.Api.Controllers
         /// <response code="200">Ok</response>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server error</response>
-        [HttpPut("/tarefa")]
+        [HttpPut("/grupo")]
         [AllowAnonymous]
-        public IActionResult Put(GrupoViewModel grupoViewModel)
+        public IActionResult AlterarGrupo(GrupoViewModel grupoViewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -73,9 +73,9 @@ namespace ProinterV.Api.Controllers
         /// <response code="200">Ok</response>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server error</response>
-        [HttpGet("/tarefa")]
+        [HttpGet("/grupo")]
         [AllowAnonymous]
-        public IActionResult Get()
+        public IActionResult BuscarTodosGrupos()
         {
             if (!ModelState.IsValid)
             {
@@ -96,7 +96,7 @@ namespace ProinterV.Api.Controllers
         /// <response code="500">Internal Server error</response>
         [HttpGet("Grupo/{idGrupo}")]
         [AllowAnonymous]
-        public IActionResult GetById(Guid idGrupo, Guid? idAluno)
+        public IActionResult BuscarGrupoPeloId(Guid idGrupo, Guid? idAluno)
         {
             if (!ModelState.IsValid)
             {
@@ -118,7 +118,7 @@ namespace ProinterV.Api.Controllers
         [HttpDelete]
         //[Authorize(Policy = "CanRemoveCustomerData")]
         [Route("grupo")]
-        public IActionResult Delete(Guid id)
+        public IActionResult ExcluirGrupo(Guid id)
         {
             //_tarefaAppService.Remove(id);
 
@@ -135,7 +135,7 @@ namespace ProinterV.Api.Controllers
         [HttpGet]
         [AllowAnonymous]
         [Route("grupo/history/{id:guid}")]
-        public IActionResult History(Guid id)
+        public IActionResult HistoricoDoGrupo(Guid id)
         {
             var grupoHistoryData = _grupoAppService.GetAllHistory(id);
             return Response(grupoHistoryData);
