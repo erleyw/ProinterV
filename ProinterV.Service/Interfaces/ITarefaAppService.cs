@@ -7,7 +7,6 @@ namespace ProinterV.Application.Interfaces
 {
     public interface ITarefaAppService : IDisposable
     {
-        void Registrar(TarefaViewModel tarefaViewModel);
         void PostarArquivo(Guid IdTarefa, ArquivoTarefaViewModel arquivoTarefaViewModel);
     }
 }

@@ -5,18 +5,18 @@ using System.Text;
 
 namespace ProinterV.Domain.Commands
 {
-    public class RegistrarAlunoCommand : AlunoCommand
+    public class AtualizarTarefaCommand : TarefaCommand
     {
-        public RegistrarAlunoCommand(string nome, string idUsuario, string matricula)
+        public AtualizarTarefaCommand(Guid idAluno, string nome, string descricao)
         {
             Nome = nome;
-            Matricula = matricula;
-            IdUsuario = idUsuario;
+            IdAluno = idAluno;
+            Descricao = descricao;
         }
 
         public override bool IsValid()
         {
-            ValidationResult = new RegistrarNovoAlunoCommandValidation().Validate(this);
+            ValidationResult = new AtualizarAlunoCommandValidation().Validate(this);
             return ValidationResult.IsValid;
         }
     }

@@ -19,5 +19,8 @@ namespace ProinterV.CrossCutting.Identity.Models.AccountViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "A confirmação da senha não corresponde.")]
         public string ConfirmPassword { get; set; }
+
+        public string Matricula { get; set; }
+        public string Nome { get; set; }
     }
 }

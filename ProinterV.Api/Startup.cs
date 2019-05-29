@@ -18,6 +18,7 @@ using Microsoft.Extensions.Options;
 using ProinterV.Api.Configurations;
 using ProinterV.CrossCutting.Identity.Authorization;
 using ProinterV.CrossCutting.Identity.Models;
+using ProinterV.Infra.Data.Context;
 using ProinterV.IoC;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -51,6 +52,12 @@ namespace ProinterV.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<DbProinterContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDbContext<EventStoreSQLContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 

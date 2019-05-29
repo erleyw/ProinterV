@@ -50,6 +50,7 @@ namespace ProinterV.Api.Controllers
 
             if (result.Succeeded)
             {
+                _alunoAppService.Register(new AlunoViewModel() { IdUsuario = user.Id, Matricula = model.Matricula, Nome = model.Nome});
                 // User claim for write customers data
                 await _userManager.AddClaimAsync(user, new Claim("Aluno", "Write"));
 

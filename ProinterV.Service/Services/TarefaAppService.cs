@@ -12,43 +12,48 @@ using ProinterV.Infra.Data.Repository.EventSourcing;
 
 namespace ProinterV.Application.Services
 {
-    public class AlunoAppService : IAlunoAppService
+    public class TarefaAppService : ITarefaAppService
     {
         private readonly IMapper _mapper;
-        private readonly IAlunoRepository _alunoRepository;
+        private readonly ITarefaRepository _tarefaRepository;
         private readonly IEventStoreRepository _eventStoreRepository;
         private readonly IMediatorHandler Bus;
 
-        public AlunoAppService(IMapper mapper,
-                                  IAlunoRepository alunoRepository,
+        public TarefaAppService(IMapper mapper,
+                                  ITarefaRepository tarefaRepository,
                                   IMediatorHandler bus,
                                   IEventStoreRepository eventStoreRepository)
         {
             _mapper = mapper;
-            _alunoRepository = alunoRepository;
+            _tarefaRepository = tarefaRepository;
             Bus = bus;
             _eventStoreRepository = eventStoreRepository;
         }
 
-        public IEnumerable<AlunoViewModel> GetAll()
+        public void PostarArquivo(Guid IdTarefa, ArquivoTarefaViewModel arquivoTarefaViewModel)
         {
-            return _alunoRepository.GetAll().ProjectTo<AlunoViewModel>(_mapper.ConfigurationProvider);
+            throw new NotImplementedException();
         }
 
-        public AlunoViewModel GetById(Guid id)
+        public IEnumerable<TarefaViewModel> GetAll()
         {
-            return _mapper.Map<AlunoViewModel>(_alunoRepository.GetById(id));
+            return _tarefaRepository.GetAll().ProjectTo<TarefaViewModel>(_mapper.ConfigurationProvider);
         }
 
-        public void Register(AlunoViewModel alunoViewModel)
+        public TarefaViewModel GetById(Guid id)
         {
-            var registerCommand = _mapper.Map<RegistrarAlunoCommand>(alunoViewModel);
+            return _mapper.Map<TarefaViewModel>(_tarefaRepository.GetById(id));
+        }
+
+        public void Register(TarefaViewModel tarefaViewModel)
+        {
+            var registerCommand = _mapper.Map<RegistrarTarefaCommand>(tarefaViewModel);
             Bus.SendCommand(registerCommand);
         }
 
-        public void Update(AlunoViewModel alunoViewModel)
+        public void Update(TarefaViewModel tarefaViewModel)
         {
-            var updateCommand = _mapper.Map<AtualizarAlunoCommand>(alunoViewModel);
+            var updateCommand = _mapper.Map<AtualizarAlunoCommand>(tarefaViewModel);
             Bus.SendCommand(updateCommand);
         }
 
@@ -57,9 +62,9 @@ namespace ProinterV.Application.Services
             throw new NotImplementedException();
         }
 
-        public IList<AlunoHistoryData> GetAllHistory(Guid id)
+        public IList<TarefaHistoryData> GetAllHistory(Guid id)
         {
-            return AlunoHistory.ToJavaScriptCustomerHistory(_eventStoreRepository.All(id));
+            return TarefaHistory.ToJavaScriptTarefaHistory(_eventStoreRepository.All(id));
         }
 
         public void Dispose()

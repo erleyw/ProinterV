@@ -7,13 +7,13 @@ using System.Text;
 
 namespace ProinterV.Application.EventSourcedNormalizers
 {
-    public class AlunoHistory
+    class TarefaHistory
     {
-        public static IList<AlunoHistoryData> HistoryData { get; set; }
+        public static IList<TarefaHistoryData> HistoryData { get; set; }
 
-        public static IList<AlunoHistoryData> ToJavaScriptCustomerHistory(IList<StoredEvent> storedEvents)
+        public static IList<TarefaHistoryData> ToJavaScriptTarefaHistory(IList<StoredEvent> storedEvents)
         {
-            HistoryData = new List<AlunoHistoryData>();
+            HistoryData = new List<TarefaHistoryData>();
             AlunoHistoryDeserializer(storedEvents);
 
             var sorted = HistoryData.OrderBy(c => c.When);

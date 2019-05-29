@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace ProinterV.Domain.CommandHandlers
 {
     public class AlunoCommandHandler : CommandHandler,
-        IRequestHandler<RegistrarNovoAlunoCommand, bool>,
+        IRequestHandler<RegistrarAlunoCommand, bool>,
         IRequestHandler<AtualizarAlunoCommand, bool>,
         IRequestHandler<RemoverAlunoCommand, bool>
     {
@@ -28,7 +28,7 @@ namespace ProinterV.Domain.CommandHandlers
             Bus = bus;
         }
 
-        public Task<bool> Handle(RegistrarNovoAlunoCommand message, CancellationToken cancellationToken)
+        public Task<bool> Handle(RegistrarAlunoCommand message, CancellationToken cancellationToken)
         {
             if (!message.IsValid())
             {

@@ -67,7 +67,7 @@ namespace ProinterV.IoC
             services.AddScoped<INotificationHandler<TarefaRegistradaEvent>, TarefaEventHandler>();
 
             // Domain - Commands
-            services.AddScoped<IRequestHandler<RegistrarNovoAlunoCommand, bool>, AlunoCommandHandler>();
+            services.AddScoped<IRequestHandler<RegistrarAlunoCommand, bool>, AlunoCommandHandler>();
             services.AddScoped<IRequestHandler<AtualizarAlunoCommand, bool>, AlunoCommandHandler>();
             services.AddScoped<IRequestHandler<RemoverAlunoCommand, bool>, AlunoCommandHandler>();
 
