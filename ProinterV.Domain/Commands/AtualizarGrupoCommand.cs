@@ -5,9 +5,9 @@ using System.Text;
 
 namespace ProinterV.Domain.Commands
 {
-    public class AtualizarTarefaCommand : TarefaCommand
+    public class AtualizarGrupoCommand : GrupoCommand
     {
-        public AtualizarTarefaCommand(Guid idAluno, string nome, string descricao)
+        public AtualizarGrupoCommand(Guid idAluno, string nome, string descricao)
         {
             Nome = nome;
             IdAluno = idAluno;
@@ -16,7 +16,7 @@ namespace ProinterV.Domain.Commands
 
         public override bool IsValid()
         {
-            ValidationResult = new AtualizarTarefaCommandValidation().Validate(this);
+            ValidationResult = new AtualizarGrupoCommandValidation().Validate(this);
             return ValidationResult.IsValid;
         }
     }

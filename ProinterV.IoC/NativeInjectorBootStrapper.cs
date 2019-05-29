@@ -42,8 +42,8 @@ namespace ProinterV.IoC
 
             // Application
             services.AddScoped<IAlunoAppService, AlunoAppService>();
-            //services.AddScoped<IGrupoAppService, >();
-            //services.AddScoped<ITarefaAppService, >();
+            services.AddScoped<IGrupoAppService, GrupoAppService>();
+            services.AddScoped<ITarefaAppService, TarefaAppService>();
 
             // Domain - Events
             services.AddScoped<INotificationHandler<DomainNotification>, DomainNotificationHandler>();
@@ -71,8 +71,14 @@ namespace ProinterV.IoC
             services.AddScoped<IRequestHandler<AtualizarAlunoCommand, bool>, AlunoCommandHandler>();
             services.AddScoped<IRequestHandler<RemoverAlunoCommand, bool>, AlunoCommandHandler>();
 
+            services.AddScoped<IRequestHandler<RegistrarTarefaCommand, bool>, TarefaCommandHandler>();
+            services.AddScoped<IRequestHandler<AtualizarTarefaCommand, bool>, TarefaCommandHandler>();
+            services.AddScoped<IRequestHandler<RemoverTarefaCommand, bool>, TarefaCommandHandler>();
+
             // Infra - Data
             services.AddScoped<IAlunoRepository, AlunoRepository>();
+            services.AddScoped<ITarefaRepository, TarefaRepository>();
+            //services.AddScoped<IGrupoRepository, GrupoRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<DbProinterContext>();
 

@@ -7,29 +7,26 @@ using System.Text;
 
 namespace ProinterV.Application.EventSourcedNormalizers
 {
-    public class TarefaHistory
+    public class GrupoHistory
     {
-        public static IList<TarefaHistoryData> HistoryData { get; set; }
+        public static IList<GrupoHistoryData> HistoryData { get; set; }
 
-        public static IList<TarefaHistoryData> ToJavaScriptTarefaHistory(IList<StoredEvent> storedEvents)
+        public static IList<GrupoHistoryData> ToJavaScriptGrupoHistory(IList<StoredEvent> storedEvents)
         {
-            HistoryData = new List<TarefaHistoryData>();
-            TarefaHistoryDeserializer(storedEvents);
+            HistoryData = new List<GrupoHistoryData>();
+            GrupoHistoryDeserializer(storedEvents);
 
             var sorted = HistoryData.OrderBy(c => c.When);
-            var list = new List<TarefaHistoryData>();
-            var last = new TarefaHistoryData();
+            var list = new List<GrupoHistoryData>();
+            var last = new GrupoHistoryData();
 
             foreach (var change in sorted)
             {
-                var jsSlot = new TarefaHistoryData
+                var jsSlot = new GrupoHistoryData
                 {
                     Id = change.Id == Guid.Empty.ToString() || change.Id == last.Id
                         ? ""
                         : change.Id,
-                    IdGrupo = change.IdGrupo == Guid.Empty.ToString() || change.IdGrupo == last.IdGrupo
-                        ? ""
-                        : change.IdGrupo,
                     IdAluno = change.IdAluno == Guid.Empty.ToString() || change.IdAluno == last.IdAluno
                         ? ""
                         : change.IdAluno,
@@ -39,6 +36,9 @@ namespace ProinterV.Application.EventSourcedNormalizers
                     Descricao = string.IsNullOrWhiteSpace(change.Descricao) || change.Descricao == last.Descricao
                         ? ""
                         : change.Descricao,
+                    Prazo = string.IsNullOrWhiteSpace(change.Prazo) || change.Prazo == last.Prazo
+                        ? ""
+                        : change.Prazo,
                     Action = string.IsNullOrWhiteSpace(change.Action) ? "" : change.Action,
                     When = change.When,
                     Who = change.Who
@@ -50,11 +50,11 @@ namespace ProinterV.Application.EventSourcedNormalizers
             return list;
         }
 
-        private static void TarefaHistoryDeserializer(IEnumerable<StoredEvent> storedEvents)
+        private static void GrupoHistoryDeserializer(IEnumerable<StoredEvent> storedEvents)
         {
             foreach (var e in storedEvents)
             {
-                var slot = new TarefaHistoryData();
+                var slot = new GrupoHistoryData();
                 dynamic values;
 
                 switch (e.MessageType)
@@ -63,7 +63,6 @@ namespace ProinterV.Application.EventSourcedNormalizers
                         values = JsonConvert.DeserializeObject<dynamic>(e.Data);
                         slot.Nome = values["Nome"];
                         slot.Descricao = values["Descricao"];
-                        slot.IdGrupo = values["IdGrupo"];
                         slot.IdAluno = values["IdAluno"];
                         slot.Action = "Registered";
                         slot.When = values["Timestamp"];
@@ -74,7 +73,6 @@ namespace ProinterV.Application.EventSourcedNormalizers
                         values = JsonConvert.DeserializeObject<dynamic>(e.Data);
                         slot.Nome = values["Nome"];
                         slot.Descricao = values["Descricao"];
-                        slot.IdGrupo = values["IdGrupo"];
                         slot.IdAluno = values["IdAluno"];
                         slot.Action = "Updated";
                         slot.When = values["Timestamp"];

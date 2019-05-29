@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ProinterV.Domain.Validations
 {
-    public abstract class TarefaValidation<T> : AbstractValidator<T> where T : TarefaCommand
+    public abstract class GrupoValidation<T> : AbstractValidator<T> where T : GrupoCommand
     {
         protected void ValidarNome()
         {
@@ -15,10 +15,16 @@ namespace ProinterV.Domain.Validations
                 .Length(2, 100).WithMessage("O campo Nome deve ter entre 2 a 100 caracteres");
         }
 
-        protected void ValidarIdGrupo()
+        protected void ValidarPrazo()
+        {
+            RuleFor(c => c.Prazo)
+                .NotEmpty().WithMessage("Por favor preencha o campo Prazo");
+        }
+
+        protected void ValidarIdAluno()
         {
             RuleFor(c => c.IdAluno)
-                .NotEmpty().WithMessage("Por favor preencha o campo IdGrupo");
+                .NotEmpty().WithMessage("Por favor preencha o campo IdAluno");
         }
     }
 }

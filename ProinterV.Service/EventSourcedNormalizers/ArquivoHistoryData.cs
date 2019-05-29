@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ProinterV.Application.EventSourcedNormalizers
 {
-    public class TarefaHistoryData
+    public class ArquivoHistoryData
     {
         public string Action { get; set; }
         public string Id { get; set; }

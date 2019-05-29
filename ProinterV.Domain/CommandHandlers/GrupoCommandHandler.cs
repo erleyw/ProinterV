@@ -13,15 +13,15 @@ using System.Threading.Tasks;
 
 namespace ProinterV.Domain.CommandHandlers
 {
-    public class TarefaCommandHandler : CommandHandler,
-        IRequestHandler<RegistrarTarefaCommand, bool>,
-        IRequestHandler<AtualizarTarefaCommand, bool>,
-        IRequestHandler<RemoverTarefaCommand, bool>
+    public class GrupoCommandHandler : CommandHandler,
+        IRequestHandler<RegistrarGrupoCommand, bool>,
+        IRequestHandler<AtualizarGrupoCommand, bool>,
+        IRequestHandler<RemoverGrupoCommand, bool>
     {
         private readonly ITarefaRepository _tarefaRepository;
         private readonly IMediatorHandler Bus;
 
-        public TarefaCommandHandler(ITarefaRepository tarefaRepository,
+        public GrupoCommandHandler(ITarefaRepository tarefaRepository,
                                       IUnitOfWork uow,
                                       IMediatorHandler bus,
                                       INotificationHandler<DomainNotification> notifications) : base(uow, bus, notifications)
@@ -30,17 +30,17 @@ namespace ProinterV.Domain.CommandHandlers
             Bus = bus;
         }
 
-        public Task<bool> Handle(AtualizarTarefaCommand request, CancellationToken cancellationToken)
+        public Task<bool> Handle(AtualizarGrupoCommand request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> Handle(RemoverTarefaCommand request, CancellationToken cancellationToken)
+        public Task<bool> Handle(RemoverGrupoCommand request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> Handle(RegistrarTarefaCommand message, CancellationToken cancellationToken)
+        public Task<bool> Handle(RegistrarGrupoCommand message, CancellationToken cancellationToken)
         {
             if (!message.IsValid())
             {
@@ -48,19 +48,19 @@ namespace ProinterV.Domain.CommandHandlers
                 return Task.FromResult(false);
             }
 
-            var tarefa = new Tarefa(Guid.NewGuid(), message.IdAluno, message.Nome, message.Descricao);
+            var grupo = new Tarefa(Guid.NewGuid(), message.IdAluno, message.Nome, message.Descricao);
 
-            if (_tarefaRepository.GetById(tarefa.Id) != null)
+            if (_tarefaRepository.GetById(grupo.Id) != null)
             {
-                Bus.RaiseEvent(new DomainNotification(message.MessageType, "Já existe um aluno com esse Email."));
+                Bus.RaiseEvent(new DomainNotification(message.MessageType, "Já existe um grupo pra esse Aluno."));
                 return Task.FromResult(false);
             }
 
-            _tarefaRepository.Add(tarefa);
+            _tarefaRepository.Add(grupo);
 
             if (Commit())
             {
-                Bus.RaiseEvent(new TarefaRegistradaEvent(tarefa.Id, tarefa.IdGrupo, tarefa.IdAluno, tarefa.Nome, tarefa.Descricao));
+                Bus.RaiseEvent(new TarefaRegistradaEvent(grupo.Id, grupo.IdGrupo, grupo.IdAluno, grupo.Nome, grupo.Descricao));
             }
 
             return Task.FromResult(true);

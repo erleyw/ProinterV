@@ -5,19 +5,21 @@ using System.Text;
 
 namespace ProinterV.Domain.Commands
 {
-    public class RegistrarTarefaCommand : TarefaCommand
+    public class RegistrarGrupoCommand : GrupoCommand
     {
-        public RegistrarTarefaCommand(string nome, string descricao, Guid idAluno, Guid idGrupo)
+        public RegistrarGrupoCommand(string nome, string descricao, Guid idAluno, DateTime prazo, string materialDeApoio)
         {
             Nome = nome;
             Descricao = descricao;
             IdAluno = idAluno;
-            IdGrupo = idGrupo;
+            Nome = nome;
+            Prazo = prazo;
+            MaterialApoio = materialDeApoio;
         }
 
         public override bool IsValid()
         {
-            ValidationResult = new RegistrarTarefaCommandValidation().Validate(this);
+            ValidationResult = new RegistrarGrupoCommandValidation().Validate(this);
             return ValidationResult.IsValid;
         }
     }
