@@ -16,8 +16,6 @@ namespace ProinterV.Domain.Models
         public string Descricao { get; set; }
         public DateTime Prazo { get; set; }
         public string MaterialApoio { get; set; }
-        public DateTime DataCadastro { get; set; }
-        public bool Ativo { get; set; }
 
         public virtual Aluno IdAlunoNavigation { get; set; }
         public virtual ICollection<Tarefa> Tarefa { get; set; }

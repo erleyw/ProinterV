@@ -8,23 +8,23 @@ namespace ProinterV.Domain.Models
     {
         public Aluno() { }
 
-        public Aluno(Guid id, string nome, string login, string senha)
+        public Aluno(Guid id, string idUsuario, string nome, string matricula)
         {
             ArquivoTarefa = new HashSet<ArquivoTarefa>();
             GrupoTrabalho = new HashSet<GrupoTrabalho>();
             Tarefa = new HashSet<Tarefa>();
 
             Id = id;
+            IdUsuario = idUsuario;
             Nome = nome;
-            Login = login;
-            Senha = senha;
+            Matricula = matricula;
             DataCadastro = DateTime.Now;
             Ativo = true;
         }
 
+        public string IdUsuario { get; private set; }
         public string Nome { get; private set; }
-        public string Login { get; private set; }
-        public string Senha { get; private set; }
+        public string Matricula { get; private set; }
 
         public virtual ICollection<ArquivoTarefa> ArquivoTarefa { get; set; }
         public virtual ICollection<GrupoTrabalho> GrupoTrabalho { get; set; }

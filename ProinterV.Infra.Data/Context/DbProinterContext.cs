@@ -15,10 +15,10 @@ namespace ProinterV.Infra.Data.Context
             _env = env;
         }
 
-        public DbProinterContext(DbContextOptions<DbProinterContext> options)
-            : base(options)
-        {
-        }
+        //public DbProinterContext(DbContextOptions<DbProinterContext> options)
+        //    : base(options)
+        //{
+        //}
 
         public virtual DbSet<Aluno> Aluno { get; set; }
         public virtual DbSet<ArquivoTarefa> ArquivoTarefa { get; set; }

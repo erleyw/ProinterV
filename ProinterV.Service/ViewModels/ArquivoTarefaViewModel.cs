@@ -8,16 +8,12 @@ namespace ProinterV.Application.ViewModels
 {
     public class ArquivoTarefaViewModel
     {
-        [Key]
-        public Guid Id { get; set; }
-
         [Required(ErrorMessage = "O Código da tarefa é obrigatória")]
         [DisplayName("Id da Tarefa")]
         public Guid IdTarefa { get; set; }
 
-        [Required(ErrorMessage = "O Aluno é obrigatório")]
         [DisplayName("Aluno")]
-        public Guid IdAluno { get; set; }
+        public Guid? IdAluno { get; set; }
 
         [Required(ErrorMessage = "O nome do arquivo é obrigatório")]
         [MinLength(2)]

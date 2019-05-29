@@ -7,20 +7,20 @@ namespace ProinterV.Domain.Events.Aluno
 {
     public class AlunoRegistradoEvent : Event
     {
-        public AlunoRegistradoEvent(Guid id, string nome, string login, string senha)
+        public AlunoRegistradoEvent(Guid id, string idUsuario, string nome, string matricula)
         {
             Id = id;
             Nome = nome;
-            Login = login;
-            Senha = senha;
+            IdUsuario = idUsuario;
+            Matricula = matricula;
             AggregateId = id;
         }
         public Guid Id { get; set; }
 
         public string Nome { get; private set; }
 
-        public string Login { get; private set; }
+        public string IdUsuario { get; private set; }
 
-        public string Senha { get; private set; }
+        public string Matricula { get; private set; }
     }
 }

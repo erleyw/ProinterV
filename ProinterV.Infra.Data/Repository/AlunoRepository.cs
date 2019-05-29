@@ -16,9 +16,9 @@ namespace ProinterV.Infra.Data.Repository
 
         }
 
-        public Aluno GetByEmail(string email)
-        {
-            return DbSet.AsNoTracking().FirstOrDefault(c => c.Login == email);
-        }
+        //public Aluno GetByEmail(string email)
+        //{
+        //    return DbSet.AsNoTracking().FirstOrDefault(c => c.Login == email);
+        //}
     }
 }
