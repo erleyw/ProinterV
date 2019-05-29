@@ -7,12 +7,12 @@ namespace ProinterV.Domain.Commands
 {
     public class AtualizarAlunoCommand : AlunoCommand
     {
-        public AtualizarAlunoCommand(Guid id, string nome, string login, string senha)
+        public AtualizarAlunoCommand(Guid id, string idUsuario, string nome, string matricula)
         {
             Id = id;
             Nome = nome;
-            Login = login;
-            Senha = senha;
+            Matricula = matricula;
+            IdUsuario = idUsuario;
         }
 
         public override bool IsValid()

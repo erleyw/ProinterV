@@ -17,13 +17,11 @@ namespace ProinterV.Application.ViewModels
         [DisplayName("Nome")]
         public string Nome { get; set; }
 
-        [Required(ErrorMessage = "O login é obrigatório")]
-        [EmailAddress]
-        [DisplayName("Login")]
-        public string Login { get; set; }
+        [DisplayName("Matrícula")]
+        public string Matricula { get; set; }
 
-        [Required(ErrorMessage = "A senha é obrigatória")]
-        [DisplayName("Senha")]
-        public string Senha { get; set; }
+        [Required(ErrorMessage = "O IdUsuario é obrigatório")]
+        [DisplayName("Cod Usuário")]
+        public string IdUsuario { get; set; }
     }
 }

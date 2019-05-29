@@ -10,8 +10,7 @@ namespace ProinterV.Domain.Validations
         public RegistrarNovoAlunoCommandValidation()
         {
             ValidarNome();
-            ValidarSenha();
-            ValidarLogin();
+            ValidarIdUsuario();
         }
     }
 }

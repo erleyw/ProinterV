@@ -15,17 +15,10 @@ namespace ProinterV.Domain.Validations
                 .Length(2, 100).WithMessage("O campo Nome deve ter entre 2 a 100 caracteres");
         }
 
-        protected void ValidarSenha()
+        protected void ValidarIdUsuario()
         {
-            RuleFor(c => c.Senha)
-                .NotEmpty().WithMessage("Por favor preencha o campo Senha");
-        }
-
-        protected void ValidarLogin()
-        {
-            RuleFor(c => c.Login)
-                .NotEmpty()
-                .EmailAddress();
+            RuleFor(c => c.IdUsuario)
+                .NotEmpty().WithMessage("Por favor preencha o campo IdUsuario");
         }
 
         protected void ValidarId()

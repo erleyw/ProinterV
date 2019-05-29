@@ -11,8 +11,7 @@ namespace ProinterV.Domain.Validations
         {
             ValidarId();
             ValidarNome();
-            ValidarSenha();
-            ValidarLogin();
+            ValidarIdUsuario();
         }
     }
 }

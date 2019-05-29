@@ -36,9 +36,9 @@ namespace ProinterV.Domain.CommandHandlers
                 return Task.FromResult(false);
             }
 
-            var aluno = new Aluno(Guid.NewGuid(), message.Nome, message.Login, message.Senha);
+            var aluno = new Aluno(Guid.NewGuid(), message.IdUsuario, message.Nome, message.Matricula);
 
-            if (_alunoRepository.GetByEmail(aluno.Login) != null)
+            if (_alunoRepository.GetById(aluno.Id) != null)
             {
                 Bus.RaiseEvent(new DomainNotification(message.MessageType, "Já existe um aluno com esse Email."));
                 return Task.FromResult(false);
@@ -48,7 +48,7 @@ namespace ProinterV.Domain.CommandHandlers
 
             if (Commit())
             {
-                Bus.RaiseEvent(new AlunoRegistradoEvent(aluno.Id, aluno.Nome, aluno.Login, aluno.Senha));
+                Bus.RaiseEvent(new AlunoRegistradoEvent(aluno.Id, aluno.IdUsuario, aluno.Nome, aluno.Matricula));
             }
 
             return Task.FromResult(true);
@@ -62,14 +62,14 @@ namespace ProinterV.Domain.CommandHandlers
                 return Task.FromResult(false);
             }
 
-            var aluno = new Aluno(message.Id, message.Nome, message.Login, message.Senha);
-            var existingCustomer = _alunoRepository.GetByEmail(aluno.Login);
+            var aluno = new Aluno(message.Id, message.IdUsuario, message.Nome, message.Matricula);
+            var existeAluno = _alunoRepository.GetById(aluno.Id);
 
-            if (existingCustomer != null && existingCustomer.Id != aluno.Id)
+            if (existeAluno != null && existeAluno.Id != aluno.Id)
             {
-                if (!existingCustomer.Equals(aluno))
+                if (!existeAluno.Equals(aluno))
                 {
-                    Bus.RaiseEvent(new DomainNotification(message.MessageType, "Email não encontrado na base de dados."));
+                    Bus.RaiseEvent(new DomainNotification(message.MessageType, "Aluno não encontrado na base de dados."));
                     return Task.FromResult(false);
                 }
             }
@@ -78,7 +78,7 @@ namespace ProinterV.Domain.CommandHandlers
 
             if (Commit())
             {
-                Bus.RaiseEvent(new AlunoAtualizadoEvent(aluno.Id, aluno.Nome, aluno.Login, aluno.Senha));
+                Bus.RaiseEvent(new AlunoAtualizadoEvent(aluno.Id, aluno.IdUsuario, aluno.Nome, aluno.Matricula));
             }
 
             return Task.FromResult(true);
