@@ -5,13 +5,12 @@ using System.Text;
 
 namespace ProinterV.Domain.Validations
 {
-    public class RegistrarNovoAlunoCommandValidation : AlunoValidation<RegistrarNovoAlunoCommand>
+    public class RegistrarNovoAlunoCommandValidation : AlunoValidation<RegistrarAlunoCommand>
     {
         public RegistrarNovoAlunoCommandValidation()
         {
             ValidarNome();
-            ValidarSenha();
-            ValidarLogin();
+            ValidarIdUsuario();
         }
     }
 }

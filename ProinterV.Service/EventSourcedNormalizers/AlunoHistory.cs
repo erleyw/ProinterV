@@ -7,14 +7,14 @@ using System.Text;
 
 namespace ProinterV.Application.EventSourcedNormalizers
 {
-    public class CustomerHistory
+    public class AlunoHistory
     {
         public static IList<AlunoHistoryData> HistoryData { get; set; }
 
         public static IList<AlunoHistoryData> ToJavaScriptCustomerHistory(IList<StoredEvent> storedEvents)
         {
             HistoryData = new List<AlunoHistoryData>();
-            CustomerHistoryDeserializer(storedEvents);
+            AlunoHistoryDeserializer(storedEvents);
 
             var sorted = HistoryData.OrderBy(c => c.When);
             var list = new List<AlunoHistoryData>();
@@ -44,7 +44,7 @@ namespace ProinterV.Application.EventSourcedNormalizers
             return list;
         }
 
-        private static void CustomerHistoryDeserializer(IEnumerable<StoredEvent> storedEvents)
+        private static void AlunoHistoryDeserializer(IEnumerable<StoredEvent> storedEvents)
         {
             foreach (var e in storedEvents)
             {
@@ -53,16 +53,16 @@ namespace ProinterV.Application.EventSourcedNormalizers
 
                 switch (e.MessageType)
                 {
-                    case "CustomerRegisteredEvent":
+                    case "AlunoRegisteredEvent":
                         values = JsonConvert.DeserializeObject<dynamic>(e.Data);
                         slot.Email = values["Login"];
-                        slot.Name = values["Name"];
+                        slot.Name = values["Nome"];
                         slot.Action = "Registered";
                         slot.When = values["Timestamp"];
                         slot.Id = values["Id"];
                         slot.Who = e.User;
                         break;
-                    case "CustomerUpdatedEvent":
+                    case "AlunoUpdatedEvent":
                         values = JsonConvert.DeserializeObject<dynamic>(e.Data);
                         slot.Email = values["Login"];
                         slot.Name = values["Name"];
@@ -71,7 +71,7 @@ namespace ProinterV.Application.EventSourcedNormalizers
                         slot.Id = values["Id"];
                         slot.Who = e.User;
                         break;
-                    case "CustomerRemovedEvent":
+                    case "AlunoRemovedEvent":
                         values = JsonConvert.DeserializeObject<dynamic>(e.Data);
                         slot.Action = "Removed";
                         slot.When = values["Timestamp"];

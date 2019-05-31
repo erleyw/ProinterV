@@ -16,7 +16,7 @@ namespace ProinterV.Infra.Data.Mappings
 
             builder.Property(e => e.DataCadastro).HasColumnType("datetime");
 
-            builder.Property(e => e.Login)
+            builder.Property(e => e.IdUsuario)
                 .IsRequired()
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -26,7 +26,7 @@ namespace ProinterV.Infra.Data.Mappings
                 .HasMaxLength(100)
                 .IsUnicode(false);
 
-            builder.Property(e => e.Senha).IsRequired();
+            builder.Property(e => e.Matricula);
         }
     }
 }

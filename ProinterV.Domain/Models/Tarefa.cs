@@ -6,17 +6,22 @@ namespace ProinterV.Domain.Models
 {
     public partial class Tarefa : Entity
     {
-        public Tarefa()
+        public Tarefa(Guid id, Guid? idAluno, string nome, string descricao)
         {
             ArquivoTarefa = new HashSet<ArquivoTarefa>();
+
+            Id = id;
+            IdAluno = IdAluno;
+            Nome = nome;
+            Descricao = descricao;
+            DataCadastro = DateTime.Now;
+            Ativo = true;
         }
 
-        public Guid IdGrupo { get; set; }
-        public Guid? IdAluno { get; set; }
-        public string Nome { get; set; }
-        public string Descricao { get; set; }
-        public DateTime DataCadastro { get; set; }
-        public bool Ativo { get; set; }
+        public Guid IdGrupo { get; private set; }
+        public Guid? IdAluno { get; private set; }
+        public string Nome { get; private set; }
+        public string Descricao { get; private set; }
 
         public virtual Aluno IdAlunoNavigation { get; set; }
         public virtual GrupoTrabalho IdGrupoNavigation { get; set; }

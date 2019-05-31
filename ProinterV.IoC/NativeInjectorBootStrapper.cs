@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using ProinterV.Application.Interfaces;
 using ProinterV.Application.Services;
 using ProinterV.CrossCutting.Bus;
+using ProinterV.CrossCutting.Identity.Authorization;
+using ProinterV.CrossCutting.Identity.Models;
 using ProinterV.Domain.CommandHandlers;
 using ProinterV.Domain.Commands;
 using ProinterV.Domain.Core.Bus;
@@ -36,12 +38,12 @@ namespace ProinterV.IoC
             services.AddScoped<IMediatorHandler, InMemoryBus>();
 
             // ASP.NET Authorization Polices
-            //services.AddSingleton<IAuthorizationHandler, ClaimsRequirementHandler>();
+            services.AddSingleton<IAuthorizationHandler, ClaimsRequirementHandler>();
 
             // Application
             services.AddScoped<IAlunoAppService, AlunoAppService>();
-            //services.AddScoped<IGrupoAppService, >();
-            //services.AddScoped<ITarefaAppService, >();
+            services.AddScoped<IGrupoAppService, GrupoAppService>();
+            services.AddScoped<ITarefaAppService, TarefaAppService>();
 
             // Domain - Events
             services.AddScoped<INotificationHandler<DomainNotification>, DomainNotificationHandler>();
@@ -65,12 +67,18 @@ namespace ProinterV.IoC
             services.AddScoped<INotificationHandler<TarefaRegistradaEvent>, TarefaEventHandler>();
 
             // Domain - Commands
-            services.AddScoped<IRequestHandler<RegistrarNovoAlunoCommand, bool>, AlunoCommandHandler>();
+            services.AddScoped<IRequestHandler<RegistrarAlunoCommand, bool>, AlunoCommandHandler>();
             services.AddScoped<IRequestHandler<AtualizarAlunoCommand, bool>, AlunoCommandHandler>();
             services.AddScoped<IRequestHandler<RemoverAlunoCommand, bool>, AlunoCommandHandler>();
 
+            services.AddScoped<IRequestHandler<RegistrarTarefaCommand, bool>, TarefaCommandHandler>();
+            services.AddScoped<IRequestHandler<AtualizarTarefaCommand, bool>, TarefaCommandHandler>();
+            services.AddScoped<IRequestHandler<RemoverTarefaCommand, bool>, TarefaCommandHandler>();
+
             // Infra - Data
             services.AddScoped<IAlunoRepository, AlunoRepository>();
+            services.AddScoped<ITarefaRepository, TarefaRepository>();
+            //services.AddScoped<IGrupoRepository, GrupoRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<DbProinterContext>();
 
@@ -84,7 +92,7 @@ namespace ProinterV.IoC
             //services.AddTransient<ISmsSender, AuthSMSMessageSender>();
 
             // Infra - Identity
-            //services.AddScoped<IUser, AspNetUser>();
+            services.AddScoped<IUser, AspNetUser>();
         }
     }
 }

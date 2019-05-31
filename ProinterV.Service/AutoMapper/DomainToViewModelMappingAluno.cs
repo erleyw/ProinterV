@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ProinterV.Application.ViewModels;
+using ProinterV.Domain.Commands;
 using ProinterV.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace ProinterV.Application.AutoMapper
         public DomainToViewModelMappingAluno()
         {
             CreateMap<Aluno, AlunoViewModel>().ReverseMap();
+            CreateMap<AlunoViewModel, RegistrarAlunoCommand>().ReverseMap();
         }
     }
 }

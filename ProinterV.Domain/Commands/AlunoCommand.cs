@@ -7,10 +7,10 @@ namespace ProinterV.Domain.Commands
     {
         public Guid Id { get; protected set; }
 
+        public string IdUsuario { get; protected set; }
+
         public string Nome { get; protected set; }
 
-        public string Login { get; protected set; }
-
-        public string Senha { get; protected set; }
+        public string Matricula { get; protected set; }
     }
 }

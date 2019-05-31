@@ -5,13 +5,13 @@ using System.Text;
 
 namespace ProinterV.Domain.Commands
 {
-    public class RegistrarNovoAlunoCommand : AlunoCommand
+    public class RegistrarAlunoCommand : AlunoCommand
     {
-        public RegistrarNovoAlunoCommand(string nome, string login, string senha)
+        public RegistrarAlunoCommand(string nome, string idUsuario, string matricula)
         {
             Nome = nome;
-            Login = login;
-            Senha = senha;
+            Matricula = matricula;
+            IdUsuario = idUsuario;
         }
 
         public override bool IsValid()

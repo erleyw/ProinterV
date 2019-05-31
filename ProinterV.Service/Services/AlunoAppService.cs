@@ -42,7 +42,7 @@ namespace ProinterV.Application.Services
 
         public void Register(AlunoViewModel alunoViewModel)
         {
-            var registerCommand = _mapper.Map<RegistrarNovoAlunoCommand>(alunoViewModel);
+            var registerCommand = _mapper.Map<RegistrarAlunoCommand>(alunoViewModel);
             Bus.SendCommand(registerCommand);
         }
 
@@ -60,7 +60,7 @@ namespace ProinterV.Application.Services
 
         public IList<AlunoHistoryData> GetAllHistory(Guid id)
         {
-            return CustomerHistory.ToJavaScriptCustomerHistory(_eventStoreRepository.All(id));
+            return AlunoHistory.ToJavaScriptCustomerHistory(_eventStoreRepository.All(id));
         }
 
         public void Dispose()

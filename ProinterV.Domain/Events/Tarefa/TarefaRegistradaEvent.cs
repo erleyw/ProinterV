@@ -7,7 +7,7 @@ namespace ProinterV.Domain.Events.Tarefa
 {
     public class TarefaRegistradaEvent : Event
     {
-        public TarefaRegistradaEvent(Guid id, Guid idGrupo, Guid idAluno, string nome, string descricao)
+        public TarefaRegistradaEvent(Guid id, Guid idGrupo, Guid? idAluno, string nome, string descricao)
         {
             Id = id;
             IdGrupo = idGrupo;
