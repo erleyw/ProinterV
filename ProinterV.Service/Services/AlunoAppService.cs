@@ -54,7 +54,8 @@ namespace ProinterV.Application.Services
 
         public void Remove(Guid id)
         {
-            throw new NotImplementedException();
+            var removeCommand = new RemoverAlunoCommand(id);
+            Bus.SendCommand(removeCommand);
         }
 
         public IList<AlunoHistoryData> GetAllHistory(Guid id)
