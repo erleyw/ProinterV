@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ProinterV.Api.Models;
 using ProinterV.Application.EventSourcedNormalizers;
 using ProinterV.Application.Interfaces;
 using ProinterV.Application.ViewModels;
@@ -11,7 +12,6 @@ using ProinterV.Domain.Core.Notifications;
 
 namespace ProinterV.Api.Controllers
 {
-    //[Route("api/[controller]")]
     [ApiController]
     public class TarefaController : ApiController
     {
@@ -25,14 +25,9 @@ namespace ProinterV.Api.Controllers
             _tarefaAppService = tarefaAppService;
         }
 
-        /// <summary>
-        /// Registrar uma nova tarefa
-        /// </summary>
-        /// <response code="200">Ok</response>
-        /// <response code="400">Bad Request</response>
-        /// <response code="500">Internal Server error</response>
-        [HttpPost("/tarefa")]
-        [AllowAnonymous]
+        [Authorize("Bearer")]
+        [HttpPost("tarefa")]
+        [ProducesResponseType(typeof(ResponseBase<TarefaViewModel>), 200)]
         public IActionResult RegistrarTarefa(TarefaViewModel tarefaViewModel)
         {
             if (!ModelState.IsValid)
@@ -41,19 +36,14 @@ namespace ProinterV.Api.Controllers
                 return Response<TarefaViewModel>(tarefaViewModel);
             }
 
-            //_tarefaAppService.Register(tarefaViewModel);
+            _tarefaAppService.Register(tarefaViewModel);
 
             return Response<TarefaViewModel>(tarefaViewModel);
         }
 
-        /// <summary>
-        /// Alterar uma tarefa
-        /// </summary>
-        /// <response code="200">Ok</response>
-        /// <response code="400">Bad Request</response>
-        /// <response code="500">Internal Server error</response>
+        [Authorize("Bearer")]
         [HttpPut("/tarefa")]
-        [AllowAnonymous]
+        [ProducesResponseType(typeof(ResponseBase<TarefaViewModel>), 200)]
         public IActionResult AlterarTarefa(TarefaViewModel tarefaViewModel)
         {
             if (!ModelState.IsValid)
@@ -62,34 +52,22 @@ namespace ProinterV.Api.Controllers
                 return Response<TarefaViewModel>(tarefaViewModel);
             }
 
-            //_tarefaAppService.Register(tarefaViewModel);
+            _tarefaAppService.Update(tarefaViewModel);
 
             return Response<TarefaViewModel>(tarefaViewModel);
         }
 
-        /// <summary>
-        /// Buscar todas as tarefas
-        /// </summary>
-        /// <response code="200">Ok</response>
-        /// <response code="400">Bad Request</response>
-        /// <response code="500">Internal Server error</response>
+        [Authorize("Bearer")]
         [HttpGet("/tarefa")]
-        [AllowAnonymous]
+        [ProducesResponseType(typeof(ResponseBase<IEnumerable<TarefaViewModel>>), 200)]
         public IActionResult BuscarTodasTarefas()
         {
-            if (!ModelState.IsValid)
-            {
-                NotifyModelStateErrors();
-                //return Response(tarefaViewModel);
-            }
-
-            //_tarefaAppService.Register(tarefaViewModel);
-
-            return Response<IEnumerable<TarefaViewModel>>();
+            return Response<IEnumerable<TarefaViewModel>>(_tarefaAppService.GetAll());
         }
 
+        [Authorize(Policy = "CanRemoveCustomerData")]
         [HttpGet("tarefa/{idTarefa}")]
-        [AllowAnonymous]
+        [ProducesResponseType(typeof(ResponseBase<TarefaViewModel>), 200)]
         public IActionResult GetTarefaById(Guid idTarefa)
         {
             if (!ModelState.IsValid)
@@ -98,13 +76,14 @@ namespace ProinterV.Api.Controllers
                 return Response<TarefaViewModel>(idTarefa);
             }
 
-            _tarefaAppService.GetById(idTarefa);
+            var tarefa = _tarefaAppService.GetById(idTarefa);
 
-            return Response<TarefaViewModel>(idTarefa);
+            return Response<TarefaViewModel>(tarefa);
         }
 
+        [Authorize(Policy = "Bearer")]
         [HttpPost("/tarefa/{idTarefa}/arquivo")]
-        [AllowAnonymous]
+        [ProducesResponseType(typeof(ResponseBase<IEnumerable<TarefaViewModel>>), 200)]
         public IActionResult PostFile(Guid idTarefa, [FromBody] ArquivoTarefaViewModel arquivoTarefaViewModel)
         {
             if (!ModelState.IsValid)
@@ -118,32 +97,19 @@ namespace ProinterV.Api.Controllers
             return Response<ArquivoTarefaViewModel>(arquivoTarefaViewModel);
         }
 
-        /// <summary>
-        /// Excluir tarefa
-        /// </summary>
-        /// <response code="200">Ok</response>
-        /// <response code="400">Bad Request</response>
-        /// <response code="500">Internal Server error</response>
-        [HttpDelete]
-        //[Authorize(Policy = "CanRemoveCustomerData")]
-        [Route("tarefa")]
+        [Authorize(Policy = "Bearer")]
+        [HttpDelete("tarefa")]
+        [ProducesResponseType(typeof(ResponseBase<TarefaViewModel>), 200)]
         public IActionResult ExcluirTarefa(Guid id)
         {
-            //_tarefaAppService.Remove(id);
+            _tarefaAppService.Remove(id);
 
             return Response<TarefaViewModel>();
         }
 
-        /// <summary>
-        /// Buscar o histórico de atualizações da tarefa
-        /// </summary>
-        /// <response code="200">Ok</response>
-        /// <response code="400">Bad Request</response>
-        /// <response code="500">Internal Server error</response>
         [ProducesResponseType(typeof(IEnumerable<TarefaHistoryData>), 200)]
-        [HttpGet]
-        [AllowAnonymous]
-        [Route("tarefa/history/{id:guid}")]
+        [HttpGet("tarefa/history/{id:guid}")]
+        [ProducesResponseType(typeof(ResponseBase<IEnumerable<TarefaHistoryData>>), 200)]
         public IActionResult HistoricoDaTarefa(Guid id)
         {
             var tarefaHistoryData = _tarefaAppService.GetAllHistory(id);
