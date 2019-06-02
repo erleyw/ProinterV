@@ -40,6 +40,11 @@ namespace ProinterV.Application.Services
             return _mapper.Map<AlunoViewModel>(_alunoRepository.GetById(id));
         }
 
+        public AlunoViewModel GetByUserId(string userId)
+        {
+            return _mapper.Map<AlunoViewModel>(_alunoRepository.GetByUserId(userId));
+        }
+
         public void Register(AlunoViewModel alunoViewModel)
         {
             var registerCommand = _mapper.Map<RegistrarAlunoCommand>(alunoViewModel);

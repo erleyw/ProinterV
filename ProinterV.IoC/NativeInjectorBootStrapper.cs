@@ -61,10 +61,15 @@ namespace ProinterV.IoC
             // Domain - Events
             //Grupo
             services.AddScoped<INotificationHandler<GrupoRegistradoEvent>, GrupoEventHandler>();
+            services.AddScoped<INotificationHandler<GrupoAtualizadoEvent>, GrupoEventHandler>();
+            services.AddScoped<INotificationHandler<GrupoRemovidoEvent>, GrupoEventHandler>();
 
             // Domain - Events
             //Tarefa
             services.AddScoped<INotificationHandler<TarefaRegistradaEvent>, TarefaEventHandler>();
+            services.AddScoped<INotificationHandler<TarefaRegistradaEvent>, TarefaEventHandler>();
+            services.AddScoped<INotificationHandler<TarefaRegistradaEvent>, TarefaEventHandler>();
+
 
             // Domain - Commands
             services.AddScoped<IRequestHandler<RegistrarAlunoCommand, bool>, AlunoCommandHandler>();
@@ -74,6 +79,10 @@ namespace ProinterV.IoC
             services.AddScoped<IRequestHandler<RegistrarTarefaCommand, bool>, TarefaCommandHandler>();
             services.AddScoped<IRequestHandler<AtualizarTarefaCommand, bool>, TarefaCommandHandler>();
             services.AddScoped<IRequestHandler<RemoverTarefaCommand, bool>, TarefaCommandHandler>();
+
+            services.AddScoped<IRequestHandler<RegistrarGrupoCommand, bool>, GrupoCommandHandler>();
+            services.AddScoped<IRequestHandler<AtualizarGrupoCommand, bool>, GrupoCommandHandler>();
+            services.AddScoped<IRequestHandler<RemoverGrupoCommand, bool>, GrupoCommandHandler>();
 
             // Infra - Data
             services.AddScoped<IAlunoRepository, AlunoRepository>();

@@ -87,12 +87,14 @@ namespace ProinterV.Api.Controllers
                 return Response<AlunoViewModel>(model);
             }
 
+            ApplicationUser userIdentity = null;
+
             bool credenciaisValidas = false;
             if (model != null && !String.IsNullOrWhiteSpace(model.Email))
             {
                 // Verifica a existência do usuário nas tabelas do
                 // ASP.NET Core Identity
-                var userIdentity = userManager.FindByEmailAsync(model.Email).Result;
+                userIdentity = userManager.FindByEmailAsync(model.Email).Result;
                 if (userIdentity != null)
                 {
                     // Efetua o login com base no Id do usuário e sua senha
@@ -135,8 +137,12 @@ namespace ProinterV.Api.Controllers
                 });
                 var token = handler.WriteToken(securityToken);
 
+                var aluno = _alunoAppService.GetByUserId(userIdentity?.Id);
+
                 return Response<AuthenticatedModel>(new AuthenticatedModel()
                 {
+                    userId = userIdentity?.Id,
+                    alunoId = aluno.Id.ToString(),
                     authenticated = true,
                     created = dataCriacao.ToString("yyyy-MM-dd HH:mm:ss"),
                     expiration = dataExpiracao.ToString("yyyy-MM-dd HH:mm:ss"),
@@ -173,7 +179,7 @@ namespace ProinterV.Api.Controllers
         public IActionResult HistoricoDoAluno(Guid id)
         {
             var tarefaHistoryData = _alunoAppService.GetAllHistory(id);
-            return Response<AlunoHistoryData>(tarefaHistoryData);
+            return Response<IEnumerable<AlunoHistoryData>>(tarefaHistoryData);
         }
     }
 }

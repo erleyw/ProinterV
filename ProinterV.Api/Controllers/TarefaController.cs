@@ -65,7 +65,7 @@ namespace ProinterV.Api.Controllers
             return Response<IEnumerable<TarefaViewModel>>(_tarefaAppService.GetAll());
         }
 
-        [Authorize(Policy = "CanRemoveCustomerData")]
+        [Authorize(Policy = "Bearer")]
         [HttpGet("tarefa/{idTarefa}")]
         [ProducesResponseType(typeof(ResponseBase<TarefaViewModel>), 200)]
         public IActionResult GetTarefaById(Guid idTarefa)

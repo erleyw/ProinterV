@@ -11,6 +11,7 @@ namespace ProinterV.Application.Interfaces
         void Register(AlunoViewModel alunoViewModel);
         IEnumerable<AlunoViewModel> GetAll();
         AlunoViewModel GetById(Guid id);
+        AlunoViewModel GetByUserId(string userId);
         void Update(AlunoViewModel alunoViewModel);
         void Remove(Guid id);
         IList<AlunoHistoryData> GetAllHistory(Guid id);

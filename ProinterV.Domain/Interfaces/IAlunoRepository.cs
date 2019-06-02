@@ -7,6 +7,6 @@ namespace ProinterV.Domain.Interfaces
 {
     public interface IAlunoRepository : IRepository<Aluno>
     {
-        //Aluno GetByEmail(string email);
+        Aluno GetByUserId(string userId);
     }
 }

@@ -7,6 +7,8 @@ namespace ProinterV.Api.Models
 {
     public class AuthenticatedModel
     {
+        public string userId { get; set; }
+        public string alunoId { get; set; }
         public bool authenticated { get; set; }
         public string created { get; set; }
         public string expiration { get; set; }

@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ProinterV.Domain.Core.Models;
 using ProinterV.Domain.Interfaces;
 using ProinterV.Domain.Models;
 using ProinterV.Infra.Data.Context;
-using System;
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using System.Text;
 
 namespace ProinterV.Infra.Data.Repository
 {
@@ -16,9 +15,9 @@ namespace ProinterV.Infra.Data.Repository
 
         }
 
-        //public Aluno GetByEmail(string email)
-        //{
-        //    return DbSet.AsNoTracking().FirstOrDefault(c => c.Login == email);
-        //}
+        public Aluno GetByUserId(string userId)
+        {
+            return DbSet.AsNoTracking().FirstOrDefault(c => c.IdUsuario == userId);
+        }
     }
 }

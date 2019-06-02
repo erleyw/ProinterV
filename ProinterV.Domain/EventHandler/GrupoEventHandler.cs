@@ -8,9 +8,19 @@ using System.Threading.Tasks;
 
 namespace ProinterV.Domain.EventHandler
 {
-    public class GrupoEventHandler : INotificationHandler<GrupoRegistradoEvent>
+    public class GrupoEventHandler : INotificationHandler<GrupoRegistradoEvent>, INotificationHandler<GrupoAtualizadoEvent>, INotificationHandler<GrupoRemovidoEvent>
     {
         public Task Handle(GrupoRegistradoEvent notification, CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task Handle(GrupoAtualizadoEvent notification, CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task Handle(GrupoRemovidoEvent notification, CancellationToken cancellationToken)
         {
             return Task.CompletedTask;
         }
