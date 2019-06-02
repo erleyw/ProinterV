@@ -38,12 +38,12 @@ namespace ProinterV.Api.Controllers
             if (!ModelState.IsValid)
             {
                 NotifyModelStateErrors();
-                return Response(tarefaViewModel);
+                return Response<TarefaViewModel>(tarefaViewModel);
             }
 
             //_tarefaAppService.Register(tarefaViewModel);
 
-            return Response(tarefaViewModel);
+            return Response<TarefaViewModel>(tarefaViewModel);
         }
 
         /// <summary>
@@ -59,12 +59,12 @@ namespace ProinterV.Api.Controllers
             if (!ModelState.IsValid)
             {
                 NotifyModelStateErrors();
-                return Response(tarefaViewModel);
+                return Response<TarefaViewModel>(tarefaViewModel);
             }
 
             //_tarefaAppService.Register(tarefaViewModel);
 
-            return Response(tarefaViewModel);
+            return Response<TarefaViewModel>(tarefaViewModel);
         }
 
         /// <summary>
@@ -85,36 +85,24 @@ namespace ProinterV.Api.Controllers
 
             //_tarefaAppService.Register(tarefaViewModel);
 
-            return Response();
+            return Response<IEnumerable<TarefaViewModel>>();
         }
 
-        /// <summary>
-        /// Buscar tarefa pelo ID
-        /// </summary>
-        /// <response code="200">Ok</response>
-        /// <response code="400">Bad Request</response>
-        /// <response code="500">Internal Server error</response>
         [HttpGet("tarefa/{idTarefa}")]
         [AllowAnonymous]
-        public IActionResult GetTarefaById(Guid idGrupo, Guid? idTarefa)
+        public IActionResult GetTarefaById(Guid idTarefa)
         {
             if (!ModelState.IsValid)
             {
                 NotifyModelStateErrors();
-                return Response(idTarefa);
+                return Response<TarefaViewModel>(idTarefa);
             }
 
-            //_tarefaAppService.Register(tarefaViewModel);
+            _tarefaAppService.GetById(idTarefa);
 
-            return Response(idTarefa);
+            return Response<TarefaViewModel>(idTarefa);
         }
 
-        /// <summary>
-        /// Postar nova versão de arquivo na tarefa
-        /// </summary>
-        /// <response code="200">Ok</response>
-        /// <response code="400">Bad Request</response>
-        /// <response code="500">Internal Server error</response>
         [HttpPost("/tarefa/{idTarefa}/arquivo")]
         [AllowAnonymous]
         public IActionResult PostFile(Guid idTarefa, [FromBody] ArquivoTarefaViewModel arquivoTarefaViewModel)
@@ -122,12 +110,12 @@ namespace ProinterV.Api.Controllers
             if (!ModelState.IsValid)
             {
                 NotifyModelStateErrors();
-                return Response(arquivoTarefaViewModel);
+                return Response<ArquivoTarefaViewModel>(arquivoTarefaViewModel);
             }
 
             _tarefaAppService.PostarArquivo(idTarefa, arquivoTarefaViewModel);
 
-            return Response(arquivoTarefaViewModel);
+            return Response<ArquivoTarefaViewModel>(arquivoTarefaViewModel);
         }
 
         /// <summary>
@@ -143,7 +131,7 @@ namespace ProinterV.Api.Controllers
         {
             //_tarefaAppService.Remove(id);
 
-            return Response();
+            return Response<TarefaViewModel>();
         }
 
         /// <summary>
@@ -159,7 +147,7 @@ namespace ProinterV.Api.Controllers
         public IActionResult HistoricoDaTarefa(Guid id)
         {
             var tarefaHistoryData = _tarefaAppService.GetAllHistory(id);
-            return Response(tarefaHistoryData);
+            return Response<IEnumerable<TarefaHistoryData>>(tarefaHistoryData);
         }
     }
 }

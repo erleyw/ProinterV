@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ProinterV.Infra.Data.Repository
 {
-    public class GrupoTrabalhoRepository : Repository<GrupoTrabalho>, IAlunoRepository
+    public class GrupoTrabalhoRepository : Repository<GrupoTrabalho>, IGrupoRepository
     {
         public GrupoTrabalhoRepository(DbProinterContext context) : base(context)
         {

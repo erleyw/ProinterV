@@ -6,10 +6,11 @@ namespace ProinterV.Domain.Models
 {
     public partial class GrupoTrabalho : Entity
     {
-        public GrupoTrabalho(Guid idAluno, string nome, string descricao, DateTime prazo, string materialApoio)
+        public GrupoTrabalho(Guid id, Guid? idAluno, string nome, string descricao, DateTime prazo, string materialApoio)
         {
             Tarefa = new HashSet<Tarefa>();
 
+            Id = id;
             IdAluno = idAluno;
             Nome = nome;
             Descricao = descricao;
@@ -19,7 +20,7 @@ namespace ProinterV.Domain.Models
             Ativo = true;
         }
 
-        public Guid IdAluno { get; set; }
+        public Guid? IdAluno { get; set; }
         public string Nome { get; set; }
         public string Descricao { get; set; }
         public DateTime Prazo { get; set; }

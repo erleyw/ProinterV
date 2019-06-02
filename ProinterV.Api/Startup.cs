@@ -1,26 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Equinox.Infra.CrossCutting.Identity.Data;
+﻿using Equinox.Infra.CrossCutting.Identity.Data;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using ProinterV.Api.Configurations;
+using ProinterV.Api.Models;
 using ProinterV.CrossCutting.Identity.Authorization;
+using ProinterV.CrossCutting.Identity.Data;
 using ProinterV.CrossCutting.Identity.Models;
 using ProinterV.Infra.Data.Context;
 using ProinterV.IoC;
 using Swashbuckle.AspNetCore.Swagger;
+using System;
 
 namespace ProinterV.Api
 {
@@ -65,21 +67,53 @@ namespace ProinterV.Api
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            var signingConfigurations = new SigningConfigurations();
+            services.AddSingleton(signingConfigurations);
+
+            var tokenConfigurations = new TokenConfigurations();
+            new ConfigureFromConfigurationOptions<TokenConfigurations>
+                (Configuration.GetSection("TokenConfigurations")).Configure(tokenConfigurations);
+            services.AddSingleton(tokenConfigurations);
+
+            services.AddAuthentication(authOptions =>
+            {
+                authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(bearerOptions =>
+            {
+                var paramsValidation = bearerOptions.TokenValidationParameters;
+                paramsValidation.IssuerSigningKey = signingConfigurations.Key;
+                paramsValidation.ValidAudience = tokenConfigurations.Audience;
+                paramsValidation.ValidIssuer = tokenConfigurations.Issuer;
+
+                // Valida a assinatura de um token recebido
+                paramsValidation.ValidateIssuerSigningKey = true;
+
+                // Verifica se um token recebido ainda é válido
+                paramsValidation.ValidateLifetime = true;
+
+                // Tempo de tolerância para a expiração de um token (utilizado
+                // caso haja problemas de sincronismo de horário entre diferentes
+                // computadores envolvidos no processo de comunicação)
+                paramsValidation.ClockSkew = TimeSpan.Zero;
+            });
+
+            services.AddAuthorization(auth =>
+            {
+                auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser().Build());
+            });
+
             services.AddMvc(options =>
             {
                 options.OutputFormatters.Remove(new XmlDataContractSerializerOutputFormatter());
-                //options.UseCentralRoutePrefix(new RouteAttribute("api/v{version}"));
                 options.UseCentralRoutePrefix(new RouteAttribute("api/v1"));
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddAutoMapperSetup();
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("CanWriteAlunoData", policy => policy.Requirements.Add(new ClaimRequirement("Aluno", "Write")));
-                //options.AddPolicy("CanRemoveCustomerData", policy => policy.Requirements.Add(new ClaimRequirement("Aluno", "Remove")));
-            });
 
             services.AddSwaggerGen(s =>
             {
@@ -91,6 +125,13 @@ namespace ProinterV.Api
                     Contact = new Contact { Name = "Bruno, Nayanne, Erley, Fabiano, Paulo"},
                     License = new License { Name = "MIT", Url = "https://github.com/erleyw/ProinterV" }
                 });
+                s.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                {
+                    Description = "JWT Authorization. Examplo: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = "header",
+                    Type = "apiKey"
+                });
             });
 
             // Adding MediatR for Domain Events and Notifications
@@ -101,17 +142,27 @@ namespace ProinterV.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,
+            ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager)
+        { 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
             else
+
             {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            // Criação de estruturas, usuários e permissões
+            // na base do ASP.NET Identity Core (caso ainda não
+            // existam)
+            new IdentityInitializer(context, userManager, roleManager)
+                .Initialize();
 
             app.UseCors(c =>
             {

@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ProinterV.Api.Models;
 using ProinterV.Application.EventSourcedNormalizers;
 using ProinterV.Application.Interfaces;
 using ProinterV.Application.ViewModels;
@@ -11,7 +12,6 @@ using System.Collections.Generic;
 
 namespace ProinterV.Api.Controllers
 {
-    //[Route("api/[controller]")]
     [ApiController]
     public class GrupoController : ApiController
     {
@@ -25,120 +25,73 @@ namespace ProinterV.Api.Controllers
             _grupoAppService = grupoAppService;
         }
 
-        /// <summary>
-        /// Registrar uma novo grupo
-        /// </summary>
-        /// <response code="200">Ok</response>
-        /// <response code="400">Bad Request</response>
-        /// <response code="500">Internal Server error</response>
-        [HttpPost("/grupo")]
-        [AllowAnonymous]
+        [Authorize("Bearer")]
+        [HttpPost("grupo")]
+        [ProducesResponseType(typeof(ResponseBase<GrupoViewModel>), 200)]
         public IActionResult RegistrarGrupo(GrupoViewModel grupoViewModel)
         {
             if (!ModelState.IsValid)
             {
                 NotifyModelStateErrors();
-                return Response(grupoViewModel);
+                return Response<GrupoViewModel>(grupoViewModel);
             }
 
-            //_tarefaAppService.Register(GrupoViewModel);
+            _grupoAppService.Register(grupoViewModel);
 
-            return Response(grupoViewModel);
+            return Response<GrupoViewModel>(grupoViewModel);
         }
 
-        /// <summary>
-        /// Alterar uma tarefa
-        /// </summary>
-        /// <response code="200">Ok</response>
-        /// <response code="400">Bad Request</response>
-        /// <response code="500">Internal Server error</response>
-        [HttpPut("/grupo")]
-        [AllowAnonymous]
+        [Authorize("Bearer")]
+        [HttpPut("grupo")]
+        [ProducesResponseType(typeof(ResponseBase<GrupoViewModel>), 200)]
         public IActionResult AlterarGrupo(GrupoViewModel grupoViewModel)
         {
             if (!ModelState.IsValid)
             {
                 NotifyModelStateErrors();
-                return Response(grupoViewModel);
+                return Response<GrupoViewModel>(grupoViewModel);
             }
 
-            //_tarefaAppService.Register(GrupoViewModel);
+            _grupoAppService.Update(grupoViewModel);
 
-            return Response(grupoViewModel);
+            return Response<GrupoViewModel>(grupoViewModel);
         }
 
-        /// <summary>
-        /// Buscar todos os grupos
-        /// </summary>
-        /// <response code="200">Ok</response>
-        /// <response code="400">Bad Request</response>
-        /// <response code="500">Internal Server error</response>
-        [HttpGet("/grupo")]
-        [AllowAnonymous]
+        [Authorize("Bearer")]
+        [HttpGet("grupo")]
+        [ProducesResponseType(typeof(ResponseBase<IEnumerable<GrupoViewModel>>), 200)]
         public IActionResult BuscarTodosGrupos()
         {
-            if (!ModelState.IsValid)
-            {
-                NotifyModelStateErrors();
-                //return Response(GrupoViewModel);
-            }
-
-            //_tarefaAppService.Register(GrupoViewModel);
-
-            return Response();
+            return Response<IEnumerable<GrupoViewModel>>(_grupoAppService.GetAll());
         }
 
-        /// <summary>
-        /// Buscar tarefa pelo ID
-        /// </summary>
-        /// <response code="200">Ok</response>
-        /// <response code="400">Bad Request</response>
-        /// <response code="500">Internal Server error</response>
+        [Authorize("Bearer")]
         [HttpGet("Grupo/{idGrupo}")]
-        [AllowAnonymous]
-        public IActionResult BuscarGrupoPeloId(Guid idGrupo, Guid? idAluno)
+        [ProducesResponseType(typeof(ResponseBase<GrupoViewModel>), 200)]
+        public IActionResult BuscarGrupoPeloId(Guid idGrupo)
         {
-            if (!ModelState.IsValid)
-            {
-                NotifyModelStateErrors();
-                return Response(idGrupo);
-            }
+            var grupoViewModel = _grupoAppService.GetById(idGrupo);
 
-            //_tarefaAppService.Register(GrupoViewModel);
-
-            return Response(idGrupo);
+            return Response<GrupoViewModel>(grupoViewModel);
         }
 
-        /// <summary>
-        /// Excluir tarefa
-        /// </summary>
-        /// <response code="200">Ok</response>
-        /// <response code="400">Bad Request</response>
-        /// <response code="500">Internal Server error</response>
-        [HttpDelete]
-        //[Authorize(Policy = "CanRemoveCustomerData")]
-        [Route("grupo")]
+        [Authorize("Bearer")]
+        [HttpDelete("grupo")]
+        [ProducesResponseType(typeof(ResponseBase<GrupoViewModel>), 200)]
         public IActionResult ExcluirGrupo(Guid id)
         {
-            //_tarefaAppService.Remove(id);
+            _grupoAppService.Remove(id);
 
-            return Response();
+            return Response<GrupoViewModel>();
         }
 
-        /// <summary>
-        /// Buscar o histórico de atualizações da tarefa
-        /// </summary>
-        /// <response code="200">Ok</response>
-        /// <response code="400">Bad Request</response>
-        /// <response code="500">Internal Server error</response>
+        [Authorize("Bearer")]
+        [HttpGet("grupo/history/{id:guid}")]
         [ProducesResponseType(typeof(IEnumerable<GrupoHistoryData>), 200)]
-        [HttpGet]
-        [AllowAnonymous]
-        [Route("grupo/history/{id:guid}")]
         public IActionResult HistoricoDoGrupo(Guid id)
         {
             var grupoHistoryData = _grupoAppService.GetAllHistory(id);
-            return Response(grupoHistoryData);
+            return Response<IEnumerable<GrupoHistoryData>>(grupoHistoryData);
         }
     }
 }

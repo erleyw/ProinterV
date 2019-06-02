@@ -2,7 +2,7 @@
 using ProinterV.Domain.Commands;
 using ProinterV.Domain.Core.Bus;
 using ProinterV.Domain.Core.Notifications;
-using ProinterV.Domain.Events.Aluno;
+using ProinterV.Domain.Events.Grupo;
 using ProinterV.Domain.Interfaces;
 using ProinterV.Domain.Models;
 using System;
@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 namespace ProinterV.Domain.CommandHandlers
 {
     public class GrupoCommandHandler : CommandHandler,
-        IRequestHandler<RegistrarNovoAlunoCommand, bool>,
-        IRequestHandler<AtualizarAlunoCommand, bool>,
-        IRequestHandler<RemoverAlunoCommand, bool>
+        IRequestHandler<RegistrarGrupoCommand, bool>,
+        IRequestHandler<AtualizarGrupoCommand, bool>,
+        IRequestHandler<RemoverGrupoCommand, bool>
     {
         private readonly IGrupoRepository _grupoRepository;
         private readonly IMediatorHandler Bus;
@@ -36,19 +36,19 @@ namespace ProinterV.Domain.CommandHandlers
                 return Task.FromResult(false);
             }
 
-            var grupo = new GrupoTrabalho(Guid.NewGuid(), message.);
+            var grupo = new GrupoTrabalho(Guid.NewGuid(), message.IdAluno, message.Nome, message.Descricao, message.Prazo, message.MaterialApoio);
 
             _grupoRepository.Add(grupo);
 
             if (Commit())
             {
-                Bus.RaiseEvent(new AlunoRegistradoEvent(grupo.Id, grupo.Nome, grupo.Login, grupo.Senha));
+                Bus.RaiseEvent(new GrupoRegistradoEvent(grupo.Id, grupo.IdAluno, grupo.Nome, grupo.Descricao, grupo.Prazo, grupo.MaterialApoio));
             }
 
             return Task.FromResult(true);
         }
 
-        public Task<bool> Handle(AtualizarAlunoCommand message, CancellationToken cancellationToken)
+        public Task<bool> Handle(AtualizarGrupoCommand message, CancellationToken cancellationToken)
         {
             if (!message.IsValid())
             {
@@ -56,29 +56,29 @@ namespace ProinterV.Domain.CommandHandlers
                 return Task.FromResult(false);
             }
 
-            var aluno = new Aluno(message.Id, message.Nome, message.Login, message.Senha);
-            var existingCustomer = _grupoRepository.GetByEmail(aluno.Login);
+            var grupo = new GrupoTrabalho(message.Id, message.IdAluno, message.Nome, message.Descricao, message.Prazo, message.MaterialApoio);
+            var existingGrupo = _grupoRepository.GetById(grupo.Id);
 
-            if (existingCustomer != null && existingCustomer.Id != aluno.Id)
+            if (existingGrupo != null && existingGrupo.Id != grupo.Id)
             {
-                if (!existingCustomer.Equals(aluno))
+                if (!existingGrupo.Equals(grupo))
                 {
-                    Bus.RaiseEvent(new DomainNotification(message.MessageType, "Email não encontrado na base de dados."));
+                    Bus.RaiseEvent(new DomainNotification(message.MessageType, "Grupo não encontrado na base de dados."));
                     return Task.FromResult(false);
                 }
             }
 
-            _grupoRepository.Update(aluno);
+            _grupoRepository.Update(grupo);
 
             if (Commit())
             {
-                Bus.RaiseEvent(new AlunoAtualizadoEvent(aluno.Id, aluno.Nome, aluno.Login, aluno.Senha));
+                Bus.RaiseEvent(new GrupoAtualizadoEvent(grupo.Id, grupo.IdAluno, grupo.Nome, grupo.Descricao, grupo.Prazo, grupo.MaterialApoio));
             }
 
             return Task.FromResult(true);
         }
 
-        public Task<bool> Handle(RemoverAlunoCommand message, CancellationToken cancellationToken)
+        public Task<bool> Handle(RemoverGrupoCommand message, CancellationToken cancellationToken)
         {
             if (!message.IsValid())
             {
@@ -90,7 +90,7 @@ namespace ProinterV.Domain.CommandHandlers
 
             if (Commit())
             {
-                Bus.RaiseEvent(new AlunoRemovidoEvent(message.Id));
+                Bus.RaiseEvent(new GrupoRemovidoEvent(message.Id));
             }
 
             return Task.FromResult(true);

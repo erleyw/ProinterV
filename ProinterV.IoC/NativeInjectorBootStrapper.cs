@@ -78,7 +78,7 @@ namespace ProinterV.IoC
             // Infra - Data
             services.AddScoped<IAlunoRepository, AlunoRepository>();
             services.AddScoped<ITarefaRepository, TarefaRepository>();
-            //services.AddScoped<IGrupoRepository, GrupoRepository>();
+            services.AddScoped<IGrupoRepository, GrupoTrabalhoRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<DbProinterContext>();
 

@@ -3,6 +3,7 @@ using System.Linq;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ProinterV.Api.Models;
 using ProinterV.Domain.Core.Bus;
 using ProinterV.Domain.Core.Notifications;
 
@@ -27,18 +28,14 @@ namespace ProinterV.Api.Controllers
             return (!_notifications.HasNotifications());
         }
 
-        protected new IActionResult Response(object result = null)
+        protected new IActionResult Response<T>(object result = null)
         {
             if (IsValidOperation())
             {
-                return Ok(new
-                {
-                    success = true,
-                    data = result
-                });
+                return Ok(new ResponseBase<T>() { data = (T) result, success = true });
             }
 
-            return BadRequest(new
+            return BadRequest(new ResponseBase<IEnumerable<string>>()
             {
                 success = false,
                 errors = _notifications.GetNotifications().Select(n => n.Value)

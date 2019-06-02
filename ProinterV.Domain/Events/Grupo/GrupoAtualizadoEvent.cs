@@ -3,9 +3,9 @@ using System;
 
 namespace ProinterV.Domain.Events.Grupo
 {
-    public class GrupoRegistradoEvent : Event
+    public class GrupoAtualizadoEvent : Event
     {
-        public GrupoRegistradoEvent(Guid id, Guid? idAluno, string nome, string descricao, DateTime prazo, string materialApoio)
+        public GrupoAtualizadoEvent(Guid id, Guid? idAluno, string nome, string descricao, DateTime prazo, string materialApoio)
         {
             Id = id;
             IdAluno = idAluno;

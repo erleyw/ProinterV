@@ -7,5 +7,6 @@ namespace ProinterV.Domain.Interfaces
 {
     public interface IGrupoRepository : IRepository<GrupoTrabalho>
     {
+
     }
 }
