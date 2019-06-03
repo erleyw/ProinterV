@@ -15,12 +15,8 @@ namespace ProinterV.Infra.Data.Context
             _env = env;
         }
 
-        //public DbProinterContext(DbContextOptions<DbProinterContext> options)
-        //    : base(options)
-        //{
-        //}
-
         public virtual DbSet<Aluno> Aluno { get; set; }
+        public virtual DbSet<AlunoGrupo> AlunoGrupo { get; set; }
         public virtual DbSet<ArquivoTarefa> ArquivoTarefa { get; set; }
         public virtual DbSet<GrupoTrabalho> GrupoTrabalho { get; set; }
         public virtual DbSet<Tarefa> Tarefa { get; set; }
@@ -38,9 +34,8 @@ namespace ProinterV.Infra.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
-
             modelBuilder.ApplyConfiguration(new AlunoMap());
+            modelBuilder.ApplyConfiguration(new AlunoGrupoMap());
             modelBuilder.ApplyConfiguration(new ArquivoTarefaMap());
             modelBuilder.ApplyConfiguration(new GrupoTrabalhoMap());
             modelBuilder.ApplyConfiguration(new TarefaMap());

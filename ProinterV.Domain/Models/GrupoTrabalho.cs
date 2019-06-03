@@ -9,6 +9,7 @@ namespace ProinterV.Domain.Models
         public GrupoTrabalho(Guid id, Guid? idAluno, string nome, string descricao, DateTime prazo, string materialApoio)
         {
             Tarefa = new HashSet<Tarefa>();
+            AlunoGrupo = new HashSet<AlunoGrupo>();
 
             Id = id;
             IdAluno = idAluno;
@@ -28,5 +29,6 @@ namespace ProinterV.Domain.Models
 
         public virtual Aluno IdAlunoNavigation { get; set; }
         public virtual ICollection<Tarefa> Tarefa { get; set; }
+        public virtual ICollection<AlunoGrupo> AlunoGrupo { get; set; }
     }
 }
