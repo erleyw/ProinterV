@@ -42,6 +42,7 @@ namespace ProinterV.Api.Controllers
         }
 
         [ProducesResponseType(typeof(ResponseBase<AlunoViewModel>), 200)]
+        [ProducesResponseType(typeof(ResponseBase<RegisterViewModel>), 400)]
         [HttpPost]
         [AllowAnonymous]
         [Route("aluno")]
@@ -61,14 +62,14 @@ namespace ProinterV.Api.Controllers
             {
                 await _userManager.AddToRoleAsync(user, "CanWriteAlunoData");
 
-                var aluno = new AlunoViewModel() { IdUsuario = user.Id, Matricula = model.Matricula, Nome = model.Nome };
+                var aluno = new AlunoViewModel() { Id = Guid.NewGuid(), IdUsuario = user.Id, Matricula = model.Matricula, Nome = model.Nome };
                 _alunoAppService.Register(aluno);
 
-                return Response<AlunoViewModel>(model);
+                return Response<AlunoViewModel>(aluno);
             }
 
             AddIdentityErrors(result);
-            return Response<AlunoViewModel>(model);
+            return Response<AlunoViewModel>(new AlunoViewModel() { Matricula = model.Matricula, Nome = model.Nome });
         }
 
         [ProducesResponseType(typeof(ResponseBase<AuthenticatedModel>), 200)]
@@ -160,6 +161,14 @@ namespace ProinterV.Api.Controllers
             }
 
             return Response<LoginViewModel>(model);
+        }
+
+        [Authorize("Bearer")]
+        [HttpGet("Aluno/{id:guid}/Grupos")]
+        [ProducesResponseType(typeof(ResponseBase<IEnumerable<GrupoViewModel>>), 200)]
+        public IActionResult BuscarTodosGruposDoAluno(Guid idAluno)
+        {
+            return Response<IEnumerable<GrupoViewModel>>(_alunoAppService.BuscarGrupos(idAluno));
         }
 
         [Authorize(Policy = "Bearer")]

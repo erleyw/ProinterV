@@ -63,6 +63,7 @@ namespace ProinterV.IoC
             services.AddScoped<INotificationHandler<GrupoRegistradoEvent>, GrupoEventHandler>();
             services.AddScoped<INotificationHandler<GrupoAtualizadoEvent>, GrupoEventHandler>();
             services.AddScoped<INotificationHandler<GrupoRemovidoEvent>, GrupoEventHandler>();
+            services.AddScoped<INotificationHandler<AlunoIncluidoNoGrupoEvent>, GrupoEventHandler>();
 
             // Domain - Events
             //Tarefa
@@ -84,8 +85,11 @@ namespace ProinterV.IoC
             services.AddScoped<IRequestHandler<AtualizarGrupoCommand, bool>, GrupoCommandHandler>();
             services.AddScoped<IRequestHandler<RemoverGrupoCommand, bool>, GrupoCommandHandler>();
 
+            services.AddScoped<IRequestHandler<IncluirAlunoNoGrupoCommand, bool>, AlunoGrupoCommandHandler>();
+
             // Infra - Data
             services.AddScoped<IAlunoRepository, AlunoRepository>();
+            services.AddScoped<IAlunoGrupoRepository, AlunoGrupoRepository>();
             services.AddScoped<ITarefaRepository, TarefaRepository>();
             services.AddScoped<IGrupoRepository, GrupoTrabalhoRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();

@@ -5,6 +5,8 @@ using ProinterV.Domain.Models;
 using ProinterV.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using ProinterV.CrossCutting.Identity.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace ProinterV.Infra.Data.Repository
 {

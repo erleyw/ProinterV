@@ -40,6 +40,12 @@ namespace ProinterV.Application.Services
             return _mapper.Map<AlunoViewModel>(_alunoRepository.GetById(id));
         }
 
+        public IEnumerable<GrupoViewModel> BuscarGrupos(Guid idAluno)
+        {
+            var aluno = _alunoRepository.GetById(idAluno);
+            return _mapper.Map<IEnumerable<GrupoViewModel>>(aluno.GrupoTrabalho);
+        }
+
         public AlunoViewModel GetByUserId(string userId)
         {
             return _mapper.Map<AlunoViewModel>(_alunoRepository.GetByUserId(userId));

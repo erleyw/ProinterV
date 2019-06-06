@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ProinterV.CrossCutting.Identity\ProinterV.CrossCutting.Identity.csproj" />
     <ProjectReference Include="..\ProinterV.Domain\ProinterV.Domain.csproj" />
   </ItemGroup>
 

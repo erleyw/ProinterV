@@ -36,7 +36,7 @@ namespace ProinterV.Domain.CommandHandlers
                 return Task.FromResult(false);
             }
 
-            var aluno = new Aluno(Guid.NewGuid(), message.IdUsuario, message.Nome, message.Matricula);
+            var aluno = new Aluno(message.Id, message.IdUsuario, message.Nome, message.Matricula);
 
             if (_alunoRepository.GetById(aluno.Id) != null)
             {

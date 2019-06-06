@@ -58,11 +58,36 @@ namespace ProinterV.Api.Controllers
         }
 
         [Authorize("Bearer")]
+        [HttpPost("grupo/{idGrupo}/IncluirAluno")]
+        [ProducesResponseType(typeof(ResponseBase<AlunoGrupoViewModel>), 200)]
+        public IActionResult IncluirAlunoNoGrupo(Guid idGrupo, [FromBody] string email)
+        {
+            var viewModel = new AlunoGrupoViewModel() { IdGrupo = idGrupo, EmailAluno = email };
+            if (!ModelState.IsValid)
+            {
+                NotifyModelStateErrors();
+                return Response<AlunoGrupoViewModel>(viewModel);
+            }
+
+            _grupoAppService.IncluirAluno(viewModel);
+
+            return Response<GrupoViewModel>(viewModel);
+        }
+
+        [Authorize("Bearer")]
         [HttpGet("grupo")]
         [ProducesResponseType(typeof(ResponseBase<IEnumerable<GrupoViewModel>>), 200)]
         public IActionResult BuscarTodosGrupos()
         {
             return Response<IEnumerable<GrupoViewModel>>(_grupoAppService.GetAll());
+        }
+
+        [Authorize("Bearer")]
+        [HttpGet("grupo/{id:guid}/Alunos")]
+        [ProducesResponseType(typeof(ResponseBase<IEnumerable<AlunoViewModel>>), 200)]
+        public IActionResult BuscarTodosAlunosDoGrupo(Guid idGrupo)
+        {
+            return Response<IEnumerable<AlunoViewModel>>(_grupoAppService.BuscarAlunos(idGrupo));
         }
 
         [Authorize("Bearer")]

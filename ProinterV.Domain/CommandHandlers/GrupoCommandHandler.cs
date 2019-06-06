@@ -36,7 +36,9 @@ namespace ProinterV.Domain.CommandHandlers
                 return Task.FromResult(false);
             }
 
-            var grupo = new GrupoTrabalho(Guid.NewGuid(), message.IdAluno, message.Nome, message.Descricao, message.Prazo, message.MaterialApoio);
+            var idGuid = message.Id == default ? Guid.NewGuid() : message.Id;
+
+            var grupo = new GrupoTrabalho(idGuid, message.IdAluno, message.Nome, message.Descricao, message.Prazo, message.MaterialApoio);
 
             _grupoRepository.Add(grupo);
 
