@@ -1,27 +1,39 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProinterV.Api.Models;
 using ProinterV.Application.EventSourcedNormalizers;
 using ProinterV.Application.Interfaces;
 using ProinterV.Application.ViewModels;
+using ProinterV.CrossCutting.Identity.Models;
 using ProinterV.Domain.Core.Bus;
 using ProinterV.Domain.Core.Notifications;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace ProinterV.Api.Controllers
 {
     [ApiController]
     public class GrupoController : ApiController
     {
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         public readonly IGrupoAppService _grupoAppService;
+        public readonly IAlunoAppService _alunoAppService;
 
         public GrupoController(
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
             IGrupoAppService grupoAppService,
+            IAlunoAppService alunoAppService,
             INotificationHandler<DomainNotification> notifications,
             IMediatorHandler mediator) : base(notifications, mediator)
         {
+            _alunoAppService = alunoAppService;
+            _userManager = userManager;
+            _signInManager = signInManager;
             _grupoAppService = grupoAppService;
         }
 
@@ -58,20 +70,31 @@ namespace ProinterV.Api.Controllers
         }
 
         [Authorize("Bearer")]
-        [HttpPost("grupo/{idGrupo}/IncluirAluno")]
+        [HttpPost("grupo/{idGrupo:guid}/IncluirAluno")]
         [ProducesResponseType(typeof(ResponseBase<AlunoGrupoViewModel>), 200)]
-        public IActionResult IncluirAlunoNoGrupo(Guid idGrupo, [FromBody] string email)
+        public IActionResult IncluirAlunoNoGrupo(Guid idGrupo, [FromBody] string email,
+            [FromServices]UserManager<ApplicationUser> userManager,
+            [FromServices]SignInManager<ApplicationUser> signInManager)
         {
-            var viewModel = new AlunoGrupoViewModel() { IdGrupo = idGrupo, EmailAluno = email };
+            
             if (!ModelState.IsValid)
             {
                 NotifyModelStateErrors();
-                return Response<AlunoGrupoViewModel>(viewModel);
+                return Response<AlunoGrupoViewModel>();
             }
 
+            var accessToken = Request.Headers["Authorization"];
+
+            var handler = new JwtSecurityTokenHandler();
+            var securityToken = handler.ReadJwtToken(accessToken.ToString().Replace("Bearer ", ""));
+
+            ApplicationUser userIdentity = _userManager.FindByNameAsync(email).Result;
+            var aluno = _alunoAppService.GetByUserId(userIdentity.Id);
+            
+            var viewModel = new AlunoGrupoViewModel() { IdGrupo = idGrupo, IdAluno = aluno.Id, EmailAluno = email };
             _grupoAppService.IncluirAluno(viewModel);
 
-            return Response<GrupoViewModel>(viewModel);
+            return Response<AlunoGrupoViewModel>(viewModel);
         }
 
         [Authorize("Bearer")]
@@ -83,7 +106,7 @@ namespace ProinterV.Api.Controllers
         }
 
         [Authorize("Bearer")]
-        [HttpGet("grupo/{id:guid}/Alunos")]
+        [HttpGet("grupo/{idGrupo:guid}/Alunos")]
         [ProducesResponseType(typeof(ResponseBase<IEnumerable<AlunoViewModel>>), 200)]
         public IActionResult BuscarTodosAlunosDoGrupo(Guid idGrupo)
         {

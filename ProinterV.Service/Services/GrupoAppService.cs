@@ -50,7 +50,14 @@ namespace ProinterV.Application.Services
         public IEnumerable<AlunoViewModel> BuscarAlunos(Guid idGrupo)
         {
             var grupo = _grupoRepository.GetById(idGrupo);
-            return _mapper.Map<IEnumerable<AlunoViewModel>>(grupo.AlunoGrupo);
+            var alunos = new List<Aluno>();
+
+            foreach (var alunoGrupo in grupo.AlunoGrupo)
+            {
+                alunos.Add(alunoGrupo.IdAlunoNavigation);
+            }
+
+            return _mapper.Map<IEnumerable<AlunoViewModel>>(alunos);
         }
 
         public GrupoViewModel GetById(Guid id)
@@ -67,10 +74,6 @@ namespace ProinterV.Application.Services
 
         public void IncluirAluno(AlunoGrupoViewModel alunoGrupo)
         {
-            ApplicationUser userIdentity = _userManager.FindByEmailAsync(alunoGrupo.EmailAluno).Result;
-            var aluno = _alunoRepository.GetByUserId(userIdentity.Id);
-            alunoGrupo.IdAluno = aluno.Id;
-
             var insertCommand = _mapper.Map<IncluirAlunoNoGrupoCommand>(alunoGrupo);
             Bus.SendCommand(insertCommand);
         }

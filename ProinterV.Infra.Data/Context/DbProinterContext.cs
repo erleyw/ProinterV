@@ -23,6 +23,7 @@ namespace ProinterV.Infra.Data.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            optionsBuilder.UseLazyLoadingProxies();
             // pega as configurações do arquivo appsettings.json
             var config = new ConfigurationBuilder()
                 .SetBasePath(_env.ContentRootPath)

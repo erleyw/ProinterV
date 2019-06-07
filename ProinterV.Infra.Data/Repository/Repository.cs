@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProinterV.Domain.Interfaces;
+using ProinterV.Domain.Models;
 using ProinterV.Infra.Data.Context;
 using System;
 using System.Linq;
@@ -14,6 +15,8 @@ namespace ProinterV.Infra.Data.Repository
         public Repository(DbProinterContext context)
         {
             Db = context;
+            Db.Aluno.Include(g => g.GrupoTrabalho)
+                    .Include(t => t.Tarefa);
             DbSet = Db.Set<TEntity>();
         }
 

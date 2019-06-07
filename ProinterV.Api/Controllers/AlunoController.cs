@@ -164,7 +164,7 @@ namespace ProinterV.Api.Controllers
         }
 
         [Authorize("Bearer")]
-        [HttpGet("Aluno/{id:guid}/Grupos")]
+        [HttpGet("Aluno/{idAluno:guid}/Grupos")]
         [ProducesResponseType(typeof(ResponseBase<IEnumerable<GrupoViewModel>>), 200)]
         public IActionResult BuscarTodosGruposDoAluno(Guid idAluno)
         {
